@@ -11,12 +11,11 @@ DEV = False
 DB_KEY = "scores" if not DEV else "scores_dev"
 WEBHOOK_URL = "https://discord.com/api/webhooks/1233484325962518709/yUxyEYZzfxOvOhd3G892pSd4XHbwdj96UnLmL9oJXeimc7sqMfUPkGhs0VA-k34o-56J"
 
-db = redis.Redis(host='redis',
-                 port=50658,
-                 decode_responses=True,
-                 ssl=True,
-                 username="default", 
-                 password="default") #! probably fine?
+db = redis.Redis(
+    host='redis',
+    port=6379,
+    decode_responses=True
+)
 
 def seconds2mmss(total_seconds: float):
 	seconds: float = total_seconds % 60

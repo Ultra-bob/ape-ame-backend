@@ -5,7 +5,7 @@ on:
 
 jobs:
   docker:
-    runs-on: ubuntu-20.04:docker://node:20-bookworm
+    runs-on: ubuntu-20.04:docker
     steps:
       - name: Login to Local Container Registry
         uses: docker/login-action@v3

@@ -12,7 +12,7 @@ jobs:
         with:
           registry: forgejo.ultrablob.me
           username: ${{ env.GITHUB_ACTOR }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.REGISTRY_KEY }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push

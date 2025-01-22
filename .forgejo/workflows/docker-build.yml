@@ -6,6 +6,8 @@ on:
 jobs:
   docker:
     runs-on: docker
+    container:
+      image: alpine:3.20
     steps:
       - name: Login to Local Container Registry
         uses: docker/login-action@v3

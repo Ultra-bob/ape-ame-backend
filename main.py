@@ -41,7 +41,7 @@ def submit_score():
 
     position = db.zrevrank(DB_KEY, uname + "|" + score + "|" + wave) + 1
     print(position)
-    if position == 1:
+    if position == 1 and int(wave) > 5:
         print("WR ALERT!!!!")
         if DEV:
              return

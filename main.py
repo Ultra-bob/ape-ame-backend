@@ -1,4 +1,5 @@
 import datetime
+import os
 from json import dumps, loads
 from flask import Flask, request
 import redis
@@ -12,8 +13,11 @@ DB_KEY = "scores" if not DEV else "scores_dev"
 WEBHOOK_URL = "https://discord.com/api/webhooks/1233484325962518709/yUxyEYZzfxOvOhd3G892pSd4XHbwdj96UnLmL9oJXeimc7sqMfUPkGhs0VA-k34o-56J"
 
 db = redis.Redis(
-    host='redis',
-    port=6379,
+    host=os.getenv('REDIS_HOST', 'redis'),
+    port=int(os.getenv('REDIS_PORT', '6379')),
+    password=os.getenv('REDIS_PASSWORD') or None,
+    socket_connect_timeout=5,
+    socket_timeout=5,
     decode_responses=True
 )
 
@@ -22,9 +26,18 @@ def seconds2mmss(total_seconds: float):
 	minutes: int   =  int(total_seconds / 60.0) % 60
 	return "%02d:%05.2f" % (minutes, seconds)
 
+@app.get("/healthz")
+def healthz():
+    db.ping()
+    return {"status": "ok"}
+
+@app.get("/leaderboard")
+def leaderboard():
+    return {"scores": [x.split("|") for x in db.zrevrange(DB_KEY, 0, 50)]}
+
 @app.route("/leaderboard", methods=["POST"])
 def submit_score():
-    data = request.args.get('score')
+    data = request.args.get('score', '')
     print(data)
     if not data.startswith("EGH"):
         return "Decryption Failure!", 403
